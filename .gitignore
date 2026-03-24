@@ -1,0 +1,54 @@
+# === OS Files ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+.directory
+
+# === IDE / Editor ===
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# === Claude Code ===
+.claude/
+
+# === n8n Builder Data ===
+# Local build metadata — not part of the showcase
+n8n-builder-data/
+
+# === Sensitive Files ===
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+!.env.template
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+*credentials*
+*secret*
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# === Logs & Temp ===
+*.log
+logs/
+tmp/
+temp/
+*.tmp

@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "from": "maria.chen@brightpath.co",
+    "subject": "Pricing info?",
+    "body": "Hi there, we're a 30-person company looking at integration tools and Nexus came up in our research. Can you send over your pricing details? We'd mainly be connecting Salesforce, HubSpot, and Stripe. Thanks, Maria",
+    "expected_category": "pricing",
+    "notes": "Straightforward pricing inquiry from a prospect. Response should include all three plan tiers with a brief summary, and ask about their volume needs to recommend the right plan. The three integrations they mention fit within the Starter plan (5 integrations), but ask about growth plans."
+  },
+  {
+    "id": 2,
+    "from": "t.williams@crestview-supply.com",
+    "subject": "Upgrading from Starter",
+    "body": "Hey, we've been on the Starter plan for about 6 months and we're starting to hit the 10k API call limit pretty regularly. We also really need the webhook support. What does the upgrade to Professional look like? Is there any proration or do we just switch at next billing cycle?",
+    "expected_category": "pricing",
+    "notes": "Existing Starter customer asking about upgrading to Professional. Response should confirm Professional includes 100k API calls and webhook support, explain the upgrade process, and mention proration is typically handled automatically. Good opportunity to highlight other Professional features they'd gain (audit logs, IP whitelisting, faster support)."
+  },
+  {
+    "id": 3,
+    "from": "procurement@dunfield-group.com",
+    "subject": "Enterprise pricing - 200+ users, annual billing",
+    "body": "We're evaluating Nexus for our organization (approximately 200 users across 3 business units). We'd need SSO via Okta, EU data residency, and we're estimating around 500k API calls per month. Could you provide enterprise pricing? We strongly prefer annual billing — is there a discount for that? Please send a formal quote if possible.",
+    "expected_category": "pricing",
+    "notes": "Enterprise pricing request with specific requirements (SSO, EU residency, high volume). Response should confirm all requested features are available on Enterprise, mention that annual billing discounts are available, and route them to sales@nexusintegrations.com or a sales call for a custom quote. Do not quote a specific price — Enterprise is custom pricing."
+  },
+  {
+    "id": 4,
+    "from": "jared.m@pulselogic.io",
+    "subject": "Salesforce integration broken - AUTH_FAILED",
+    "body": "Our Salesforce sync has been failing since this morning. Every sync attempt returns AUTH_FAILED. Nothing changed on our end that I'm aware of. We have a big demo tomorrow and really need this working. Can someone look into this ASAP?",
+    "expected_category": "support",
+    "notes": "AUTH_FAILED error on Salesforce integration. Response should walk them through the documented troubleshooting steps: verify API credentials are still valid, check if their Salesforce password was recently changed (which would invalidate the security token), and confirm the security token is appended to the password in the Nexus dashboard. Also check if Salesforce API access is still enabled for their user profile."
+  },
+  {
+    "id": 5,
+    "from": "ops@clearbridge.co",
+    "subject": "API calls exceeded?? We barely use this",
+    "body": "We got an alert saying we've exceeded our API call limit but I don't understand how — we only have 3 integrations running. We're on the Starter plan. Is there a way to see what's eating up all the calls? Also how quickly does this reset?",
+    "expected_category": "support",
+    "notes": "RATE_LIMIT_EXCEEDED confusion on Starter plan (10k calls/mo). Response should direct them to Monitoring > API Usage to see per-integration call breakdown, explain that some integrations (especially CRM syncs with many records) can consume calls quickly at short sync intervals, mention the monthly reset on the 1st of each month at midnight UTC, and suggest they consider upgrading to Professional (100k calls) or adjusting sync intervals to reduce usage."
+  },
+  {
+    "id": 6,
+    "from": "dana.k@redfoxretail.com",
+    "subject": "Field mapping between Pipedrive and QuickBooks",
+    "body": "I'm trying to sync deal data from Pipedrive into QuickBooks as invoices, but the currency field keeps getting mapped wrong. Pipedrive sends it as a string like \"USD\" and QuickBooks expects a numeric currency code. Is there a way to set up a transform rule for this? I looked in the docs but couldn't figure it out.",
+    "expected_category": "support",
+    "notes": "Data mapping/transform issue between CRM and billing tool. Response should explain the Transform feature in field mapping (Integrations > [Integration] > Field Mapping > Transform), specifically value mapping to convert string currency codes to the numeric format QuickBooks expects. Walk them through setting up a transform rule."
+  },
+  {
+    "id": 7,
+    "from": "compliance@hartwell-financial.com",
+    "subject": "SOC 2 Type II Report Request",
+    "body": "Hi Nexus team, we are currently conducting our annual vendor review and need to obtain a copy of your most recent SOC 2 Type II audit report. Could you please share this with us? We can provide an NDA if required. Thank you, Sarah Klein, Compliance Manager",
+    "expected_category": "security",
+    "notes": "Requesting SOC 2 report. Response should confirm Nexus is SOC 2 Type II certified, and direct them to security@nexusintegrations.com to request the report. An NDA is not required for the SOC 2 report itself (it's available upon request), but appreciate their offer. Do NOT attempt to provide the report directly — route to the security team."
+  },
+  {
+    "id": 8,
+    "from": "dpo@euromedica.de",
+    "subject": "GDPR — where is our data stored?",
+    "body": "We are a Germany-based healthcare company evaluating Nexus. Under GDPR we need to ensure our data remains in the EU. Can you confirm whether EU data residency is available? Also, do you have a Data Processing Addendum we can review? We'd need this signed before proceeding.",
+    "expected_category": "security",
+    "notes": "GDPR and EU data residency question. Response should confirm EU data residency is available on the Enterprise plan (AWS eu-west-1), mention the EU Data Processing Addendum is available via legal@nexusintegrations.com, and note that data residency is configured at account creation for Enterprise customers. Since they're evaluating, also suggest they contact sales@nexusintegrations.com for Enterprise plan details."
+  },
+  {
+    "id": 9,
+    "from": "infosec@grandstone-capital.com",
+    "subject": "Security questionnaire for vendor assessment",
+    "body": "Hi, we need Nexus to complete our standard vendor security questionnaire (attached — 85 questions covering infrastructure, access controls, incident response, business continuity, and data handling). Our security committee meets next month so we'd need this back within 2 weeks. Who should I send this to?",
+    "expected_category": "security",
+    "notes": "Security questionnaire request that should be escalated to the security team. Response should acknowledge the request and redirect them to security@nexusintegrations.com, as the general support team cannot complete custom security assessments per the docs. Mention that the security team handles all vendor assessment questionnaires. Do not attempt to answer the 85 questions from documentation alone."
+  },
+  {
+    "id": 10,
+    "from": "alex.novak@coastline-media.com",
+    "subject": "Help connecting Salesforce",
+    "body": "Just signed up for Nexus and I'm trying to connect our Salesforce instance but I keep getting errors. I put in my username and password but the test connection fails. Not sure what I'm doing wrong. This is my first time setting up something like this. Any help appreciated!",
+    "expected_category": "setup",
+    "notes": "New user struggling with Salesforce setup — likely missing the security token. Response should provide the full Salesforce setup walkthrough: enable API access in Salesforce, generate a security token (My Settings > Personal > Reset My Security Token), and explain that the token must be appended directly to the password in the Nexus dashboard. This is the most common setup issue with Salesforce."
+  },
+  {
+    "id": 11,
+    "from": "devops@stackline.io",
+    "subject": "Webhook endpoint setup",
+    "body": "We want to set up webhooks so our internal system gets notified when records sync. A couple questions: does the endpoint need to be HTTPS? And what does the payload format look like? We're on the Professional plan btw.",
+    "expected_category": "setup",
+    "notes": "Webhook setup question from a Professional plan customer. Response should confirm webhooks are available on their plan, yes the endpoint must be HTTPS, explain the payload format (JSON with event type, timestamp, and affected record data), walk through the setup steps (Integrations > Webhooks > Add Endpoint), and mention the signing secret option for payload verification and the test event feature."
+  },
+  {
+    "id": 12,
+    "from": "rachel.t@greenvalley-health.org",
+    "subject": "How often can syncs run?",
+    "body": "We need our HubSpot contacts to sync into our PostgreSQL database as close to real-time as possible. Right now it looks like it only runs every 5 minutes. Is there a way to make it faster? We're on the Starter plan currently.",
+    "expected_category": "setup",
+    "notes": "Sync interval question from a Starter plan user. Response should explain that 5 minutes is the minimum sync interval on Starter, Professional allows 1-minute intervals, and Enterprise offers true real-time sync via change data capture. Since they want near-real-time, recommend upgrading — this also touches on pricing but the primary intent is understanding configuration, so categorize as setup. Mention how to configure the interval in Integrations > Sync Settings."
+  },
+  {
+    "id": 13,
+    "from": "sales@cloudmetrics-analytics.com",
+    "subject": "Partnership opportunity — analytics for your customers",
+    "body": "Hi Nexus team! I'm with CloudMetrics and we offer embedded analytics dashboards that could be a great add-on for your integration platform. We work with several SaaS companies in the B2B space and think there's a natural fit. Would love to set up a 15-min call to explore a partnership. Let me know if interested!",
+    "expected_category": "off-topic",
+    "notes": "Vendor pitch / partnership solicitation. This is not a customer support request. Response should politely acknowledge the outreach but explain this inbox is for customer support. If they want to explore partnerships, they could try contacting sales@nexusintegrations.com or a general business inquiry channel."
+  },
+  {
+    "id": 14,
+    "from": "mike.d@trailblazer-outdoors.com",
+    "subject": "Order #48291 — wrong size shipped",
+    "body": "Hi, I ordered a large jacket but received a medium. My order number is 48291. Can you please send the correct size or process a return? This is the second time this has happened.",
+    "expected_category": "off-topic",
+    "notes": "Completely wrong company — this person thinks they're contacting an e-commerce store. Response should politely inform them they've reached Nexus Integrations, a software integration platform, and that they'll need to contact the correct company for their order issue."
+  },
+  {
+    "id": 15,
+    "from": "jessica.lane@gmail.com",
+    "subject": "Software Engineer position",
+    "body": "Hello, I came across Nexus Integrations and I'm really interested in the work you do. I'm a full-stack developer with 5 years of experience in Node.js and Python. Are you currently hiring? I've attached my resume. Thanks, Jessica",
+    "expected_category": "off-topic",
+    "notes": "Job application inquiry. Not a customer support request. Response should thank them for their interest, explain this is the customer support channel, and direct them to the company careers page or a general HR/hiring email if one exists. Since none is documented, suggest they check the company website for open positions."
+  },
+  {
+    "id": 16,
+    "from": "cto@meridian-logistics.com",
+    "subject": "URGENT: Considering cancellation",
+    "body": "I've had it with this platform. We've opened 4 support tickets in the past 2 weeks and none of them have been resolved. Our Stripe sync has been broken for 8 days now and it's costing us real money — we can't send invoices. If this isn't fixed by end of week we're moving to a competitor. I need someone senior on the phone TODAY.",
+    "expected_category": "escalate",
+    "notes": "Angry customer threatening cancellation with unresolved tickets. This MUST be escalated to a human agent immediately — do not attempt to troubleshoot. Response should acknowledge their frustration, apologize for the experience, confirm the urgency, and escalate to a senior support engineer or account manager. If they're on Enterprise, connect them with their dedicated account manager."
+  },
+  {
+    "id": 17,
+    "from": "admin@prismworks.co",
+    "subject": "Data loss during sync — records missing",
+    "body": "We ran a sync between HubSpot and our PostgreSQL database yesterday evening and about 300 contact records seem to have disappeared from the database. They were there before the sync and now they're gone. We did not delete them. This is a serious problem — that data may not be recoverable from our side. Please investigate immediately.",
+    "expected_category": "escalate",
+    "notes": "Potential data loss / corruption report. This is a critical issue that must be escalated to engineering immediately. Response should take this seriously, assure them the team will investigate, ask them not to run additional syncs until the issue is reviewed, and escalate to the engineering/data integrity team. Request details like the exact sync timestamp and integration ID to speed up investigation."
+  },
+  {
+    "id": 18,
+    "from": "legal@whitmore-partners.com",
+    "subject": "RE: Service Agreement — dispute on SLA credits",
+    "body": "Per our Enterprise agreement signed in January, we are entitled to SLA credits for the two outage incidents in February (totaling 4.5 hours of downtime). Our account manager has not responded to our credit request in 10 business days. Please escalate this to your legal or finance team. We may need to involve our legal counsel if this is not addressed promptly.",
+    "expected_category": "escalate",
+    "notes": "Legal/contract dispute about SLA credits. Support should NOT attempt to resolve contract or billing disputes. Response should acknowledge the issue, apologize for the delayed response from their account manager, and immediately escalate to the legal or finance team. Reference their Enterprise agreement and the specific incidents mentioned."
+  },
+  {
+    "id": 19,
+    "from": "it@bellhaven-group.com",
+    "subject": "Need SSO — is it available on our plan?",
+    "body": "Our IT security policy now requires SSO for all SaaS tools. We're on the Starter plan right now. I looked through the settings but can't find anything about SSO or SAML. Is this a feature you offer? If so, what do we need to do to enable it? We use Okta for identity management.",
+    "expected_category": "pricing",
+    "notes": "Edge case: could be support (feature question) or pricing (upsell). The customer is asking about SSO which is only available on the Enterprise plan. Response should confirm that SSO/SAML (including Okta) is supported but only on the Enterprise plan — it's not available on Starter or Professional. This is effectively a pricing/upsell conversation since they'd need to upgrade significantly. Provide Enterprise plan details and suggest contacting sales@nexusintegrations.com for a quote."
+  },
+  {
+    "id": 20,
+    "from": "info@unknown-sender.net",
+    "subject": "Question",
+    "body": "Hi, I have a question about the thing we discussed. Can someone get back to me? Thanks.",
+    "expected_category": "escalate",
+    "notes": "Extremely vague email with no useful context — no indication of what was discussed, no company name, no specifics. Cannot be classified into any category with confidence. Should be escalated to a human agent who can look up the sender's email in the CRM, check for prior conversations, and respond appropriately. Automated response should acknowledge receipt and let them know a team member will follow up, possibly asking for more details."
+  }
+]
