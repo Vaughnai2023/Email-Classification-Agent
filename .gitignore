@@ -29,6 +29,10 @@ Desktop.ini
 # Local build metadata — not part of the showcase
 n8n-builder-data/
 
+# === Build Plan ===
+# Internal architecture notes — not for public consumption
+build-plan.md
+
 # === Sensitive Files ===
 .env
 .env.*

@@ -1,52 +1,8 @@
 # Inbox Inferno — Email Classification Agent
 
-**An intelligent n8n workflow that classifies inbound customer emails into 6 categories and drafts grounded, documentation-backed replies — with a built-in evaluation system to prove it works.**
+**An AI-powered email triage system that classifies customer emails, drafts accurate replies grounded in product documentation, and proves its own reliability — scoring 0.95 across 20 test cases.**
 
 Built for the [Inbox Inferno at Nexus Integrations](https://community.n8n.io) community challenge.
-
----
-
-## What It Does
-
-1. **Receives** an inbound customer email (from, subject, body) via webhook
-2. **Classifies** it into one of 6 categories — pricing, support, security, setup, off-topic, or escalate — using a decision-tree prompt with confidence scoring
-3. **Injects** only the relevant documentation section for that category (not the entire 310-line doc)
-4. **Drafts** a grounded reply that never hallucinates — citing only what's in the docs, and flagging itself when it can't answer
-
-## Architecture
-
-```
-┌───────────┐     ┌─────────────┐     ┌─────────────────┐     ┌──────────────┐
-│  Webhook  │────▶│  Normalize  │────▶│   Classifier     │────▶│  Confidence  │
-│  Trigger  │     │   Input     │     │  (gpt-4o-mini)   │     │    Gate      │
-└───────────┘     └─────────────┘     └─────────────────┘     └──────┬───────┘
-                                                                      │
-┌───────────┐                                              ┌──────────▼───────┐
-│   Eval    │─────────────────────────────────────────────▶│ Category Router  │
-│  Trigger  │                                              │   (6 outputs)    │
-└───────────┘                                              └──────────┬───────┘
-                                                                      │
-                                                           ┌──────────▼───────┐
-                                                           │   Doc Injector   │
-                                                           │ (scoped lookup)  │
-                                                           └──────────┬───────┘
-                                                                      │
-                                                           ┌──────────▼───────┐
-                                                           │  Reply Drafter   │
-                                                           │    (gpt-4o)      │
-                                                           └──────────┬───────┘
-                                                                      │
-                                                           ┌──────────▼───────┐
-                                                           │   Source Gate    │
-                                                           └────┬────────┬───┘
-                                                                │        │
-                                                    ┌───────────▼┐  ┌───▼──────────┐
-                                                    │  Respond   │  │  Evaluation  │
-                                                    │  to Client │  │  Pipeline    │
-                                                    └────────────┘  └──────────────┘
-```
-
-**Low confidence?** The confidence gate auto-escalates rather than guessing wrong. Safety over speed.
 
 ---
 
@@ -55,98 +11,62 @@ Built for the [Inbox Inferno at Nexus Integrations](https://community.n8n.io) co
 | | |
 |---|---|
 | ![Workflow Overview](screenshots/workflow-overview.png) | ![Eval Results](screenshots/eval-results.png) |
-| *Full n8n workflow — from webhook trigger through classification, doc injection, reply drafting, and evaluation* | *Evaluation run across 20 test cases — 0.95 overall score* |
+| *The complete workflow — classification, doc-scoped reply generation, and dual-path evaluation* | *Evaluation results — 0.95 overall score across 20 diverse test cases* |
+
+---
+
+## The Problem
+
+Customer support inboxes are noisy. Emails range from straightforward pricing questions to angry escalations to completely off-topic vendor pitches. Most AI solutions either:
+
+- **Hallucinate** — inventing prices, features, or policies that don't exist
+- **Miss escalations** — letting angry or legally sensitive emails get an auto-reply instead of a human
+- **Dump everything into one prompt** — wasting tokens and confusing the model
+
+## What I Built
+
+A two-phase email agent that prioritizes **accuracy and safety over speed**:
+
+1. **Classification** — A lightweight model (gpt-4o-mini) sorts each email into one of 6 categories: pricing, support, security, setup, off-topic, or escalate. It checks for escalation signals *first*, before anything else.
+
+2. **Confidence gate** — If the classifier isn't confident, the email is automatically escalated to a human. No guessing.
+
+3. **Scoped documentation injection** — Instead of stuffing the entire knowledge base into every prompt, only the relevant section is injected (~1-2k tokens vs ~6k). This keeps the model focused and costs down.
+
+4. **Grounded reply generation** — A larger model (gpt-4o) drafts the reply using *only* the provided documentation. It includes a self-audit flag — if it goes beyond the docs, it tells you.
+
+5. **Three-layer evaluation** — The system proves itself with exact category matching, an LLM judge that scores grounding and escalation appropriateness, and the self-audit flag. The result: **0.95 across 20 test cases** covering edge cases like multi-category emails, vague requests, and angry customers.
+
+---
+
+## Why These Design Choices Matter
+
+| Decision | Why It Matters |
+|----------|---------------|
+| Escalation checked first | A wrong category scores zero. Escalating safely is always better than guessing wrong. |
+| Separate classification and generation models | Small/fast model for routing, larger model for nuance. Cheaper and more accurate. |
+| Category-scoped doc injection | Less noise in the prompt = fewer hallucinations and lower token cost. |
+| Confidence circuit breaker | Uncertain emails go to humans, not to a model that might get it wrong. |
+| Self-audit flag on every reply | The agent flags itself when it can't fully answer from docs — built-in honesty. |
 
 ---
 
 ## Who Is This For?
 
-- **Businesses drowning in support email** — See how AI can triage and draft responses without hallucinating or losing angry customers
-- **n8n builders** — Learn a production-grade pattern for LLM-powered email agents with built-in evaluation
-- **AI automation consultants** — Fork this as a starting point for client email automation projects
-- **Anyone evaluating AI reliability** — The 3-layer eval system (exact match + LLM judge + self-audit) is a reusable pattern for proving AI agents work
+**Business owners and operations teams** tired of their support inbox being a bottleneck. If your team spends hours every day reading, sorting, and responding to customer emails — and you're worried about AI getting it wrong — this is the kind of system that solves it reliably.
 
----
+**Revenue operations and GTM teams** who need fast, accurate responses to pricing and setup inquiries without waiting for a human to get to it.
 
-## Key Decisions
-
-| What most builders do | What we do instead | Why |
-|---|---|---|
-| Single "classify + reply" LLM call | Separated classification → generation pipeline | Isolating classification lets us optimize accuracy independently from reply quality |
-| Full doc dump in every prompt | Category-scoped doc injection (~1-2k tokens vs ~6k) | Cheaper, faster, fewer distractions for the LLM |
-| Escalation as fallback | Escalation checked FIRST + confidence circuit breaker | The scoring function penalizes misclassification as total failure — escalating safely is always better than guessing wrong |
-| Same model for everything | gpt-4o-mini for classification, gpt-4o for reply | Classification is a routing decision (small/fast model). Reply generation needs nuance (larger model) |
-| Basic pass/fail eval | Three-layer eval: exact match + LLM judge + self-audit flag | Proves both classification accuracy AND reply groundedness |
-
----
-
-## Repo Structure
-
-```
-inbox-inferno/
-├── nexus-docs.md          ← Nexus Integrations product documentation (source of truth for the agent)
-├── build-plan.md          ← Detailed architecture plan — node-by-node workflow design
-├── test-emails.json       ← 20 test cases with expected categories and evaluation notes
-├── screenshots/           ← Workflow and evaluation screenshots (to be added)
-├── .gitignore
-└── README.md
-```
-
----
-
-## How to Use This
-
-### Prerequisites
-
-- [n8n](https://n8n.io) instance (self-hosted or cloud)
-- OpenAI API key (gpt-4o and gpt-4o-mini access)
-
-### Step 1: Study the Architecture
-
-Read [`build-plan.md`](build-plan.md) for the complete node-by-node workflow design, prompt strategies, and evaluation wiring.
-
-### Step 2: Review the Documentation
-
-[`nexus-docs.md`](nexus-docs.md) is the ground truth the agent uses. It covers pricing, setup, security, support, and contact information for the fictional Nexus Integrations company.
-
-### Step 3: Explore the Test Dataset
-
-[`test-emails.json`](test-emails.json) contains 20 carefully crafted test emails spanning all 6 categories, including edge cases like multi-category emails, vague requests, and angry customers. Each includes an `expected_category` and detailed notes.
-
-### Step 4: Build the Workflow
-
-Follow the build sequence in `build-plan.md` to construct the workflow in your n8n instance. The plan includes all prompts, node configurations, and wiring details.
-
-### Step 5: Evaluate
-
-Load the 20 test cases into an n8n Data Table, run the evaluation trigger, and verify:
-- **Categorization accuracy** >= 90%
-- **LLM Judge score** >= 85%
-- **All escalation cases** correctly routed
+**Regulated industries** where hallucinated responses are a liability. This agent never invents information — and proves it with evaluation data.
 
 ---
 
 ## Tech Stack
 
 - **Workflow engine**: [n8n](https://n8n.io) — open-source workflow automation
-- **Classification**: OpenAI gpt-4o-mini (temp: 0) with structured output parsing
-- **Reply generation**: OpenAI gpt-4o (temp: 0.3) with grounding enforcement
+- **Classification**: OpenAI gpt-4o-mini with structured output parsing
+- **Reply generation**: OpenAI gpt-4o with grounding enforcement
 - **Evaluation**: n8n built-in eval framework + custom LLM judge
-- **Documentation**: Custom Nexus Integrations product docs (310 lines, 6 sections)
-
----
-
-## Evaluation System
-
-The agent proves its own reliability through a **3-layer evaluation pipeline**:
-
-| Layer | What It Tests | Method |
-|-------|--------------|--------|
-| **Categorization** | Does the agent pick the right category? | Exact match: `agent_category` vs `expected_category` |
-| **LLM Judge** | Is the reply grounded in docs? Is escalation appropriate? | GPT-4o scores 0 or 1 based on a rubric mirroring the challenge scoring function |
-| **Self-Audit** | Did the agent go beyond the documentation? | The reply drafter sets a `contains_info_not_in_docs` flag on itself |
-
-A response only scores full marks when the category is correct **AND** the reply is grounded **AND** escalation is appropriate.
 
 ---
 
@@ -154,11 +74,12 @@ A response only scores full marks when the category is correct **AND** the reply
 
 If your team is drowning in customer emails and you want an AI agent that actually works — not one that hallucinates pricing or loses angry customers — let's talk.
 
-I build reliable AI automation workflows with n8n for businesses that need their email triage, classification, and response drafting to be accurate and auditable.
+I design and build reliable AI automation workflows for businesses that need their email triage to be accurate, auditable, and safe.
 
 **Get in touch:**
-- [LinkedIn — Vaughn Botha](https://www.linkedin.com/in/vaughnbotha/)
-- [vaughnai2023@gmail.com](mailto:vaughnai2023@gmail.com)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Vaughn_Botha-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vaughnbotha/)
+[![Email](https://img.shields.io/badge/Email-vaughnai2023@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:vaughnai2023@gmail.com)
 
 ---
 
