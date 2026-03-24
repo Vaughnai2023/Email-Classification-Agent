@@ -52,14 +52,10 @@ Built for the [Inbox Inferno at Nexus Integrations](https://community.n8n.io) co
 
 ## Screenshots
 
-> **Coming soon** — screenshots will be added after the workflow is deployed and evaluated.
-
 | | |
 |---|---|
 | ![Workflow Overview](screenshots/workflow-overview.png) | ![Eval Results](screenshots/eval-results.png) |
-| *Full n8n workflow canvas* | *Evaluation run — pass rates across 20 test cases* |
-| ![Classification Example](screenshots/classification-example.png) | |
-| *Example: email classified and reply drafted* | |
+| *Full n8n workflow — from webhook trigger through classification, doc injection, reply drafting, and evaluation* | *Evaluation run across 20 test cases — 0.95 overall score* |
 
 ---
 
